@@ -11,7 +11,7 @@ import pickle
 
 import numpy as np
 
-from sklearn import svm
+from sklearn.svm import LinearSVC as Model
 
 from engine.data_loader import DataLoader
 from engine.scorer import Scorer
@@ -33,7 +33,7 @@ class Trainer:
 
         self.scorer = Scorer()
 
-        self.model = svm.LinearSVC(
+        self.model = Model(
             max_iter=FLAGS.num_iter,
         )
 

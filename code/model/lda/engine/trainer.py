@@ -11,7 +11,7 @@ import pickle
 
 import numpy as np
 
-from sklearn import discriminant_analysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as Model
 
 from engine.data_loader import DataLoader
 from engine.scorer import Scorer
@@ -33,7 +33,7 @@ class Trainer:
 
         self.scorer = Scorer()
 
-        self.model = svm.LinearDiscriminantAnalysis()
+        self.model = Model()
 
     ################################################################
 
