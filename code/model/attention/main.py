@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
-
+__title__ = 'Attention'
 
 import os
 
@@ -17,6 +17,8 @@ from engine.trainer import Trainer
 ################################################################################################################################
 
 FLAGS = flags.FLAGS
+
+flags.DEFINE_string('appname', __title__, help='app name')
 
 flags.DEFINE_string('device', None,
                     help='the pytorch device; "cpu", "cuda:0", "cuda:1", etc...')
@@ -34,6 +36,8 @@ flags.mark_flag_as_required('input_dir')
 
 flags.DEFINE_string('model_file', None,
                     help='the path to the model file')
+flags.DEFINE_string('figure_file', None,
+                    help='the path to the figure file')
 
 flags.DEFINE_bool('no_train', False,
                   help='Do not training.')

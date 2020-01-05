@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
+__title__ = 'SVM'
 
 import os
 
@@ -17,6 +18,8 @@ from engine.trainer import Trainer
 
 FLAGS = flags.FLAGS
 
+flags.DEFINE_string('appname', __title__, help='app name')
+
 flags.DEFINE_integer('num_iter', 100000, help='the maximum number of itertion')
 
 flags.DEFINE_string('input_dir', None,
@@ -25,6 +28,8 @@ flags.mark_flag_as_required('input_dir')
 
 flags.DEFINE_string('model_file', None,
                     help='the path to the model file')
+flags.DEFINE_string('figure_file', None,
+                    help='the path to the figure file')
 
 flags.DEFINE_bool('no_train', False,
                   help='Do not training.')

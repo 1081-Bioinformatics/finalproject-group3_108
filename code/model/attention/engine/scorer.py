@@ -6,7 +6,10 @@ __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 from absl import flags
 from absl import logging
 
+import os
+
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn import metrics
 
 ################################################################################################################################
@@ -47,7 +50,34 @@ class Scorer:
         confidence_lower = sorted_scores[int(0.05 * len(sorted_scores))]
         confidence_upper = sorted_scores[int(0.95 * len(sorted_scores))]
 
-        print(f"AUC {metrics.roc_auc_score(y_true, y_score):9.6f}"
-              f" (95%CI {confidence_lower:9.6f} - {confidence_upper:9.6f})")
+        msg = f"AUC {metrics.roc_auc_score(y_true, y_score):.6f}" + \
+            f" (95%CI {confidence_lower:.6f} - {confidence_upper:.6f})"
+
+        print(msg)
+
+        self.draw(
+            y_true=y_true,
+            y_score=y_score,
+            msg=msg,
+        )
 
         ################################################################################################################################
+
+    def draw(self, *, y_true, y_score, msg):
+
+        fpr, tpr, _ = metrics.roc_curve(y_true, y_score)
+
+        plt.figure()
+        plt.plot(fpr, tpr, color='darkorange', lw=2)
+        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        plt.xlim([-0.05, 1.0])
+        plt.ylim([0.0, 1.05])
+        plt.xlabel('1-Specificity')
+        plt.ylabel('Sensitivity')
+        plt.suptitle(FLAGS.appname)
+        plt.title(msg)
+
+        file = FLAGS.figure_file
+        os.makedirs(os.path.dirname(file), exist_ok=True)
+        logging.info(f'Saving figure into {file}')
+        plt.savefig(file)
