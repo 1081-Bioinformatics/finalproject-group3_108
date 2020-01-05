@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
-__title__ = 'SVM'
+__title__ = 'LDA'
 
 import os
 
