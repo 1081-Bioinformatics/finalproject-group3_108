@@ -37,12 +37,19 @@ class Trainer:
         self.train_batcher, self.dev_batcher, self.test_batcher = \
             Batcher.load(
                 input_dir=FLAGS.input_dir,
-                device=self.device
+                device=self.device,
             )
 
         self.scorer = Scorer()
 
-        self.model = Model()
+        self.model = Model(
+            num_feature=self.train_batcher.num_feature,
+        )
+        self.model.to(device=self.device)
+        self.optimizer = torch.optim.Adam(
+            self.model.parameters(),
+            lr=1e-3,
+        )
 
     ################################################################
 
@@ -56,7 +63,8 @@ class Trainer:
 
             # Run training and validation
             train_loss = self._run_train_epoch(self.train_batcher)
-            dev_loss = self._run_eval_epoch(self.dev_batcher)
+            dev_loss, _ = self._run_eval_epoch(
+                self.dev_batcher)
 
             # Check if reached current best
             if dev_loss < dev_loss_best:
@@ -78,9 +86,13 @@ class Trainer:
     def run_test(self):
 
         self._load_model()
-        self._run_eval_epoch(self.test_batcher)
-        # self.scorer(y_true, y_pred)
-        # self._save_result(result_file, **res)
+        test_loss, (y_true, y_score,) = self._run_eval_epoch(self.test_batcher)
+        logging.info(f'Test Loss: {test_loss:9.6f}')
+
+        self.scorer(
+            y_true=y_true,
+            y_score=y_score,
+        )
 
     ########################################################################################################################
     # Routines for an epoch
@@ -90,31 +102,25 @@ class Trainer:
         self.model.train()
 
         total_loss_val = 0.
-        for batch_idx, (x, y) in enumerate(tqdm.tqdm(batcher)):
+        for batch_idx, (x, y_true) in enumerate(tqdm.tqdm(batcher)):
 
-            print(batch_idx, x.shape, y.shape)
+            # Run model and compute loss
+            y_score = self.model(x)
+            loss = self.model.loss(
+                y_score,
+                y_true,
+            )
 
-            # # Run model and compute loss
-            # output, _ = self.model(torch.tensor(
-            #     input,
-            #     device=self.device,
-            #     dtype=torch.float,
-            # ))
-            # loss = self.model.loss(
-            #     input=output,
-            #     target=torch.tensor(
-            #         label,
-            #         device=self.device,
-            #         dtype=torch.long,
-            #     ),
-            #     weight=torch.tensor(
-            #         batcher.label_weight,
-            #         device=self.device,
-            #         dtype=torch.float,
-            #     ),
-            # )
+            # Add loss
+            loss_val = loss.item()
+            total_loss_val += loss_val
 
-        return 1
+            # Run backward propagation
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
+
+        return total_loss_val / batcher.num_sample
 
     def _run_eval_epoch(self, batcher):
         """Run evaluation for an epoch.
@@ -123,17 +129,44 @@ class Trainer:
         self.model.eval()
 
         total_loss_val = 0.
-        for batch_idx, (x, y) in enumerate(tqdm.tqdm(batcher)):
+        all_y_true = []
+        all_y_score = []
+        for batch_idx, (x, y_true) in enumerate(tqdm.tqdm(batcher)):
 
-            print(batch_idx, x.shape, y.shape)
+            # Run model and compute loss
+            y_score = self.model(x)
+            loss = self.model.loss(
+                y_score,
+                y_true,
+            )
+            all_y_true.append(y_true.cpu().data.numpy())
+            all_y_score.append(y_score.cpu().data.numpy())
 
-        return 0
+            # Add loss
+            loss_val = loss.item()
+            total_loss_val += loss_val
+
+        all_y_true = np.concatenate(all_y_true, axis=0)
+        all_y_score = np.concatenate(all_y_score, axis=0)
+
+        return total_loss_val / batcher.num_sample, (all_y_true, all_y_score,)
 
     ########################################################################################################################
     # Routines model I/O
 
     def _load_model(self):
-        pass
+        """Load pretrained model.
+        """
+        file = FLAGS.model_file
+        logging.info(f'Loading model from {file} ...')
+        state_dict = torch.load(
+            file, map_location=lambda storage, loc: storage)
+
+        self.model.load_state_dict(state_dict)
 
     def _save_model(self):
-        pass
+
+        file = FLAGS.model_file
+        logging.info(f'Saving model into {file} ...')
+        os.makedirs(os.path.dirname(file), exist_ok=True)
+        torch.save(self.model.state_dict(), file)

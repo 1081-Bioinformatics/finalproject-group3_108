@@ -27,7 +27,6 @@ flags.DEFINE_integer('num_epoch_after_best', 10,
                      help='The model will run extra <num_epoch_after_best> of epochs '
                      'after reaching the minimal loss on development set, '
                      'and stop training if not getting better.')
-flags.DEFINE_integer('num_head', 10, help='the number of heads in attention')
 
 flags.DEFINE_string('input_dir', None,
                     help='the path to the input data files.')
@@ -35,6 +34,12 @@ flags.mark_flag_as_required('input_dir')
 
 flags.DEFINE_string('model_file', None,
                     help='the path to the model file')
+
+flags.DEFINE_bool('no_train', False,
+                  help='Do not training.')
+
+flags.DEFINE_bool('no_test', False,
+                  help='Do not testing.')
 
 ################################################################################################################################
 
@@ -60,11 +65,13 @@ def main(_):
     # Init trainer
     trainer = Trainer()
 
-    logging.info("==== Training ====")
-    trainer.run_train()
+    if not FLAGS.no_train:
+        logging.info("==== Training ====")
+        trainer.run_train()
 
-    logging.info("==== Testing ====")
-    trainer.run_test()
+    if not FLAGS.no_test:
+        logging.info("==== Testing ====")
+        trainer.run_test()
 
 
 if __name__ == '__main__':

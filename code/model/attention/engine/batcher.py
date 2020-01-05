@@ -12,7 +12,8 @@ import tqdm
 import numpy as np
 import torch
 
-from sklearn.model_selection import train_test_split
+from sklearn import model_selection
+from sklearn import preprocessing
 
 ################################################################################################################################
 
@@ -38,7 +39,7 @@ class Batcher:
             y,
             device=device,
             dtype=torch.float,
-        ).unsqueeze(-1)
+        )
 
         dataset = torch.utils.data.TensorDataset(self.x, self.y)
         self.loader = torch.utils.data.DataLoader(
@@ -47,8 +48,16 @@ class Batcher:
             shuffle=shuffle,
         )
 
+    @property
+    def num_sample(self):
+        return self.x.shape[0]
+
+    @property
+    def num_feature(self):
+        return self.x.shape[1]
+
     def __len__(self):
-        return self.y.shape[0]
+        return int(np.ceil(self.num_sample / FLAGS.batch_size))
 
     def __iter__(self):
         yield from self.loader
@@ -59,7 +68,11 @@ class Batcher:
         train_x, train_y = cls._load_data(os.path.join(input_dir, 'train'))
         test_x, test_y = cls._load_data(os.path.join(input_dir, 'test'))
 
-        train_x, dev_x, train_y, dev_y = train_test_split(
+        scaler = preprocessing.StandardScaler()
+        train_x = scaler.fit_transform(train_x, train_y)
+        test_x = scaler.transform(test_x)
+
+        train_x, dev_x, train_y, dev_y = model_selection.train_test_split(
             train_x,
             train_y,
             test_size=0.1,
