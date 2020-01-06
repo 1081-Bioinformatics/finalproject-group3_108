@@ -31,9 +31,12 @@ make lda lr svm rndfor elasticnet attention
 ### code
 
 #### Structure
-- code/core  Core functions for most models
-- code/preprocess  Preprocessing scripts
-- code/util  Utility routines
+- `code/core`
+	- Core functions for most models
+- `code/preprocess`
+	- Preprocessing scripts
+- `code/util`
+	- Utility routines
 
 #### Packages
 - numpy (matrix utilities)
@@ -45,8 +48,8 @@ make lda lr svm rndfor elasticnet attention
 - coloredlogs (beautiful logging)
 
 #### Analysis
-- code/util/scorer.py
-	Computes the AUC/CI for ROC curves
+- `code/util/scorer.py`
+	- Computes the AUC/CI for ROC curves
 
 ### results
 #### Which part of the paper do you reproduce?
