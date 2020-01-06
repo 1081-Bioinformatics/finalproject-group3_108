@@ -71,10 +71,10 @@ make lda lr svm rndfor elasticnet attention
 
 ## References
 * Packages we use
-	- numpy (matrix utilities)
-	- scikit-learn (statistics routines)
-	- pytorch (attention model framework)
-	- keras (NN model framework)
-	- matplotlib (figure drawing)
-	- absl-py (flag management)
-	- coloredlogs (beautiful logging)
+	- numpy 
+	- scikit-learn 
+	- pytorch 
+	- keras
+	- matplotlib 
+	- absl-py
+	- coloredlogs
