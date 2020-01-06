@@ -17,24 +17,27 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('data_dir', '../data', help='the data directory')
 flags.DEFINE_string('result_dir', '../results', help='the result directory')
 
-flags.DEFINE_string('data_npy_dir', '../data/npy', help='the numpy data directory')
-flags.DEFINE_string('result_model_dir', '../results/model', help='the model directory')
-flags.DEFINE_string('result_figure_dir', '../results/figure', help='the figure directory')
+flags.DEFINE_string('data_npy_dir', '../data/npy',
+                    help='the numpy data directory')
+flags.DEFINE_string('result_model_dir', '../results/model',
+                    help='the model directory')
+flags.DEFINE_string('result_figure_dir', '../results/figure',
+                    help='the figure directory')
 
 ################################################################################################################################
 
 # fmt='%(asctime)s %(filename)12.12s:%(lineno)-4d %(levelname)8s %(message)s'
-fmt='%(asctime)s %(levelname)8s %(message)s'
-datefmt='%Y-%m-%d %H:%M:%S'
+fmt = '%(asctime)s %(levelname)8s %(message)s'
+datefmt = '%Y-%m-%d %H:%M:%S'
 field_styles = {
-    'asctime': {'color': 'green', 'faint': True},
-    'filename': {'color': 'cyan', 'faint': True},
-    'levelname': {'color': 'black', 'bold': True},
+    'asctime': {'color': 'green'},
+    'filename': {'color': 'cyan'},
+    'levelname': {'color': 'magenta', 'bold': True},
 }
 level_styles = {
     'debug': {'color': 'blue'},
     'info': {'color': 'green'},
-    'warning': {'color': 'yellow', 'faint': True},
+    'warning': {'color': 'yellow'},
     'error': {'color': 'red', 'bold': True},
     'critical': {'background': 'red', 'bold': True},
 }

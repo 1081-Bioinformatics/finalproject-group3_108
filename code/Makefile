@@ -1,6 +1,6 @@
 PY = python3 -m
 
-.PHONY: all run preprocess
+.PHONY: all run preprocess train
 
 all: run
 
