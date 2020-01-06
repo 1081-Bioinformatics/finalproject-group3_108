@@ -1,9 +1,8 @@
 # Title of your paper
 ### Members
-* name, student ID1
-* name, student ID2
-* name, student ID3
-* ...
+* 盧佳妤, 108753120
+* 陳先灝, 108753107
+* 段寶鈞,
 
 ### Demo
 ```bash
@@ -19,14 +18,15 @@ make lda lr svm rndfor elasticnet attention
 ## Folder organization and its related information
 
 ### docs
-* Your presentation, 1081_bioinformatics_FP_< groupID >.ppt/pptx/pdf, by **01.07**
-* Any related document for the paper
-  * software user guide
+* 1081_bioinformatics_FP_3.pptx/pdf, by **01.07**
+
 
 ### data
 * Source
 * Format
 * Size
+
+
 
 ### code
 
@@ -61,5 +61,11 @@ make lda lr svm rndfor elasticnet attention
 1. The original authors uses STATISTICA and Weka to produce their models. Since these programs either required commercial licenses or is hare to use, we chose to use python to reproduce the results. However, we are not able to reproduce the results since STATISTICA and Weka provides some fine-tuning that we don't know.
 
 ## References
-* Packages you use
-* Related publications
+* Packages we use
+	- numpy (matrix utilities)
+	- scikit-learn (statistics routines)
+	- pytorch (attention model framework)
+	- keras (NN model framework)
+	- matplotlib (figure drawing)
+	- absl-py (flag management)
+	- coloredlogs (beautiful logging)
