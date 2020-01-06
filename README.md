@@ -71,6 +71,9 @@ make lda lr svm rndfor elasticnet attention
 1. The original authors uses STATISTICA and Weka to produce their models. Since these programs either required commercial licenses or is hare to use, we chose to use python to reproduce the results. However, we are not able to reproduce the results since STATISTICA and Weka provides some fine-tuning that we don't know.
 
 ## References
+
+* [Elias, K. M. et al. Diagnostic potential for a serum miRNA neural network for detection of ovarian cancer. Elife 6, (2017).](https://www.ncbi.nlm.nih.gov/pubmed/29087294)
+* [Vaswani, Ashish, et al. "Attention is all you need." Advances in neural information processing systems. 2017.](https://arxiv.org/abs/1706.03762)
 * Packages we use
 	- numpy 
 	- scikit-learn 
@@ -79,5 +82,3 @@ make lda lr svm rndfor elasticnet attention
 	- matplotlib 
 	- absl-py
 	- coloredlogs
-* [Elias, K. M. et al. Diagnostic potential for a serum miRNA neural network for detection of ovarian cancer. Elife 6, (2017).](https://www.ncbi.nlm.nih.gov/pubmed/29087294)
-* [Vaswani, Ashish, et al. "Attention is all you need." Advances in neural information processing systems. 2017.](https://arxiv.org/abs/1706.03762)
