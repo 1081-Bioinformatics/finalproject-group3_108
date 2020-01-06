@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Trainer for network models"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags
@@ -10,10 +12,12 @@ import json
 import os
 # import tqdm
 
+
 class tqdm:
     @staticmethod
     def tqdm(x):
         return x
+
 
 import numpy as np
 import torch
@@ -31,6 +35,9 @@ NUM_EPOCH_AFTER_BEST = 10
 
 ################################################################################################################################
 
+# Get model from model type
+
+
 def get_model(num_feature):
     model_name = FLAGS.model_name
 
@@ -41,6 +48,7 @@ def get_model(num_feature):
     logging.fatal(f'Unknown model {model_name}!')
 
 ################################################################################################################################
+
 
 class Trainer:
 
@@ -69,6 +77,7 @@ class Trainer:
         )
 
     ################################################################
+    # Routines for training/testing
 
     def run_train(self):
 
@@ -140,8 +149,6 @@ class Trainer:
         return total_loss_val / batcher.num_sample
 
     def _run_eval_epoch(self, batcher):
-        """Run evaluation for an epoch.
-        """
 
         self.model.eval()
 
@@ -169,11 +176,10 @@ class Trainer:
         return total_loss_val / batcher.num_sample, (all_y_true, all_y_score,)
 
     ########################################################################################################################
-    # Routines model I/O
+    # Routines for model I/O
 
     def _load_model(self):
-        """Load pretrained model.
-        """
+
         file = FLAGS.model_file
         logging.debug(f'<< {file} ...')
         state_dict = torch.load(

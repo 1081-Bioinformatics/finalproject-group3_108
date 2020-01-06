@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Attention model"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags

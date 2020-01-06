@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Trainer for statistics models"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags
@@ -20,6 +22,8 @@ FLAGS = flags.FLAGS
 
 ################################################################################################################################
 
+
+# Get model from model type
 def get_model():
     model_name = FLAGS.model_name
 
@@ -33,7 +37,8 @@ def get_model():
 
     if model_name == 'svm':
         from sklearn.svm import LinearSVC
-        return LinearSVC(max_iter=100000)
+        dual = (FLAGS.input_name == '0_original')
+        return LinearSVC(dual=dual, max_iter=100000)
 
     if model_name == 'nb':
         from sklearn.naive_bayes import BernoulliNB
@@ -55,17 +60,19 @@ def get_model():
 
 ################################################################################################################################
 
+
 class Trainer:
 
     def __init__(self):
 
         self.loader = DataLoader(FLAGS.input_dir)
         self.scorer = Scorer()
-        self.model  = get_model()
+        self.model = get_model()
 
         self.model_file = f'{FLAGS.model_file}.pkl'
 
     ################################################################
+    # Routines for training/testing
 
     def run_train(self):
 
@@ -95,11 +102,10 @@ class Trainer:
         )
 
     ########################################################################################################################
-    # Routines model I/O
+    # Routines for model I/O
 
     def _load_model(self):
-        """Load pretrained model.
-        """
+
         ifile = self.model_file
         logging.info(f'<< {ifile} ...')
         with open(ifile, 'rb') as fin:

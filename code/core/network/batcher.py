@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Provide mini-batches to trainer"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags
@@ -44,6 +46,7 @@ class Batcher:
             dtype=torch.float,
         )
 
+        # Form batcher
         dataset = torch.utils.data.TensorDataset(self.x, self.y)
         self.loader = torch.utils.data.DataLoader(
             dataset=dataset,
@@ -65,6 +68,7 @@ class Batcher:
     def __iter__(self):
         yield from self.loader
 
+    # Load batchers from dataloader
     @classmethod
     def load(cls, *, input_dir, device):
 

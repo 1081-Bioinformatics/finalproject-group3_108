@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Format and beautify logger / Define default paths"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags
@@ -25,6 +27,8 @@ flags.DEFINE_string('result_figure_dir', '../results/figure',
                     help='the figure directory')
 
 ################################################################################################################################
+
+# Define colored formatter
 
 # fmt='%(asctime)s %(filename)12.12s:%(lineno)-4d %(levelname)8s %(message)s'
 fmt = '%(asctime)s %(levelname)8s %(message)s'
@@ -51,6 +55,7 @@ formatter = coloredlogs.ColoredFormatter(
 absl_logging.set_verbosity(logging.DEBUG)
 absl_logging.get_absl_handler().setFormatter(formatter)
 
+# Disable matplotlib logging
 mpl_logger = logging.getLogger('matplotlib')
 mpl_logger.handlers.clear()
 mpl_logger.setLevel(logging.WARNING)

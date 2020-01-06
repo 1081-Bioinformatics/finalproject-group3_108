@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Make sub-dataset by selecting features"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import app
@@ -29,6 +31,7 @@ flags.mark_flag_as_required('features')
 
 ################################################################################################################################
 
+
 def main(_):
 
     if FLAGS.log_dir:
@@ -39,9 +42,11 @@ def main(_):
     for k, v in FLAGS.flag_values_dict().items():
         logging.debug(f'- {k}: {v}')
 
+    # Load original data
     idir = os.path.join(FLAGS.data_npy_dir, FLAGS.input_name)
     loader = DataLoader(idir)
 
+    # Find feature indices
     idxs = []
     for f in FLAGS.features:
         i = np.argwhere(loader.feature == f)
@@ -50,12 +55,15 @@ def main(_):
         idxs.append(i[0, 0])
     idxs = np.asarray(idxs)
 
+    # Select feature and columns of X
     loader.feature = loader.feature[idxs]
     loader.train_set.x = loader.train_set.x[:, idxs]
     loader.test_set.x = loader.test_set.x[:, idxs]
 
+    # Dump new data
     odir = os.path.join(FLAGS.data_npy_dir, FLAGS.output_name)
-    loader.dump(loader.feature, loader.train_set, loader.test_set, output_dir=odir)
+    loader.dump(loader.feature, loader.train_set,
+                loader.test_set, output_dir=odir)
 
 
 if __name__ == '__main__':

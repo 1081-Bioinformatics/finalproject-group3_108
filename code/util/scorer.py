@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Compute scores for model outputs"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import flags
@@ -21,9 +23,11 @@ FLAGS = flags.FLAGS
 
 class Scorer:
 
+    # Compute AUC score
     def auc(self, *, y_true, y_score):
         return metrics.roc_auc_score(y_true, y_score)
 
+    # Compute AUC score and CI
     def __call__(self, *, y_true, y_score):
 
         # Bootstrap
@@ -61,8 +65,9 @@ class Scorer:
             msg=msg,
         )
 
-        ################################################################################################################################
+    ################################################################################################################################
 
+    # Draw ROC curve
     def draw(self, *, y_true, y_score, msg):
 
         fpr, tpr, _ = metrics.roc_curve(y_true, y_score)

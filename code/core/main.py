@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Main training/testing script for most models"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 import os
@@ -25,7 +27,8 @@ flags.DEFINE_string('full_name', None, help='<model_name>_<input_name>')
 
 flags.DEFINE_string('input_dir', None, help='<data_npy_dir>/<input_name>')
 flags.DEFINE_string('model_file', None, help='<result_model_dir>/<full_name>')
-flags.DEFINE_string('figure_file', None, help='<result_figure_dir>/<full_name>')
+flags.DEFINE_string('figure_file', None,
+                    help='<result_figure_dir>/<full_name>')
 
 flags.DEFINE_string('device', None, help='the device to run')
 
@@ -34,6 +37,8 @@ flags.DEFINE_bool('no_test', False, help='Don\'t testing.')
 
 ################################################################################################################################
 
+
+# Get trainer from model type
 def get_trainer():
     model_name = FLAGS.model_name
 
@@ -60,12 +65,12 @@ def main(_):
         logging.debug(f'- {k}: {v}')
 
     # Set paths
-    FLAGS.full_name   = f'{FLAGS.model_name}_{FLAGS.input_name}'
-    FLAGS.input_dir   = os.path.join(FLAGS.data_npy_dir, FLAGS.input_name)
-    FLAGS.model_file  = os.path.join(FLAGS.result_model_dir, FLAGS.full_name)
+    FLAGS.full_name = f'{FLAGS.model_name}_{FLAGS.input_name}'
+    FLAGS.input_dir = os.path.join(FLAGS.data_npy_dir, FLAGS.input_name)
+    FLAGS.model_file = os.path.join(FLAGS.result_model_dir, FLAGS.full_name)
     FLAGS.figure_file = os.path.join(FLAGS.result_figure_dir, FLAGS.full_name)
 
-    # Run
+    # Run trainer
     trainer = get_trainer()
     if not FLAGS.no_train:
         logging.info("==== Training ====")
@@ -74,6 +79,7 @@ def main(_):
     if not FLAGS.no_test:
         logging.info("==== Testing ====")
         trainer.run_test()
+
 
 if __name__ == '__main__':
     app.run(main)

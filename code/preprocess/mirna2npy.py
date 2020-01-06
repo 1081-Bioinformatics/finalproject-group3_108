@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""Convert CSV data from mirbase to numpy format and split training/testing datasets"""
+
 __author__ = 'Jia-Yu Lu <jeanie0807@gmail.com>'
 
 from absl import app
@@ -20,11 +22,13 @@ from util.data_loader import DataLoader, DataSet
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('input_file', 'mirbase/mirna_tpm.csv', help='the CSV file name')
+flags.DEFINE_string('input_file', 'mirbase/mirna_tpm.csv',
+                    help='the CSV file name')
 flags.DEFINE_string('output_name', '0_original', help='the output directory')
 flags.DEFINE_integer('seed', 0, help='the random seed')
 
 ################################################################################################################################
+
 
 def main(_):
 
@@ -36,6 +40,7 @@ def main(_):
     for k, v in FLAGS.flag_values_dict().items():
         logging.debug(f'- {k}: {v}')
 
+    # Read CSV data
     ifile = os.path.join(FLAGS.data_dir, FLAGS.input_file)
     logging.info(f'<< {ifile} ...')
     with open(ifile) as fin:
@@ -44,11 +49,13 @@ def main(_):
         assert data[0, 0] == 'name'
         assert data[0, -1] == 'label'
 
-    feature = data[0,  1:-1].astype(np.str_)
-    name    = data[1:, 0   ].astype(np.str_)
-    x       = data[1:, 1:-1].astype(np.float32)
-    y       = data[1:,   -1].astype(np.float32)
+    # Extract data
+    feature = data[0, 1:-1].astype(np.str_)
+    name = data[1:, 0].astype(np.str_)
+    x = data[1:, 1:-1].astype(np.float32)
+    y = data[1:, -1].astype(np.float32)
 
+    # Split train and test
     x_train, x_test, y_train, y_test, name_train, name_test = \
         model_selection.train_test_split(
             x, y, name,
@@ -56,11 +63,14 @@ def main(_):
             random_state=FLAGS.seed,
         )
 
+    # From training and testing dataset
     train_set = DataSet(x=x_train, y=y_train, name=name_train)
     test_set = DataSet(x=x_test, y=y_test, name=name_test)
 
+    # Dump data
     odir = os.path.join(FLAGS.data_npy_dir, FLAGS.output_name)
     DataLoader.dump(feature, train_set, test_set, output_dir=odir)
+
 
 if __name__ == '__main__':
     app.run(main)
