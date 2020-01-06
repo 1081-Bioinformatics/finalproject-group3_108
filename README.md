@@ -31,7 +31,7 @@ make lda lr svm rndfor elasticnet attention
 - Format
 	- xlsx file
 		- [GSE94533_Processed_file_Cohort1.xlsx](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE94533&format=file&file=GSE94533%5FProcessed%5Ffile%5FCohort1%2Exlsx%2Egz)
-  	- [GSE94533_Processed_file_Cohort2.xlsx](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE94533&format=file&file=GSE94533%5FProcessed%5Ffile%5FCohort2%2Exlsx%2Egz)
+		- [GSE94533_Processed_file_Cohort2.xlsx](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE94533&format=file&file=GSE94533%5FProcessed%5Ffile%5FCohort2%2Exlsx%2Egz)
 - Size
 	- 4.89MB + 9.22MB
 
