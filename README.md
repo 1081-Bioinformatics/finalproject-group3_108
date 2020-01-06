@@ -6,7 +6,6 @@
 * ...
 
 ### Demo
-You might provide an example commend or few commends to reproduce your analysis
 ```bash
 cd code
 
