@@ -1,8 +1,8 @@
-# Title of your paper
+# Diagnostic potential for a serum miRNA neural network for detection of ovarian cancer
 ### Members
 * 盧佳妤, 108753120
 * 陳先灝, 108753107
-* 段寶鈞,
+* 段寶鈞, 108753116
 
 ### Demo
 ```bash
@@ -22,9 +22,18 @@ make lda lr svm rndfor elasticnet attention
 
 
 ### data
-* Source
-* Format
-* Size
+- Source
+	- NCBI
+		- [GEO Accession viewer (GSE94533)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE94533)
+		- [Run Selector (PRJNA371423)](https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA371423)
+	- EBI
+		- [ENA Broswer (PRJNA371423)](https://www.ebi.ac.uk/ena/browser/view/PRJNA371423)
+- Format
+	- xlsx file
+		- [GSE94533_Processed_file_Cohort1.xlsx](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE94533&format=file&file=GSE94533%5FProcessed%5Ffile%5FCohort1%2Exlsx%2Egz)
+  	- [GSE94533_Processed_file_Cohort2.xlsx](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE94533&format=file&file=GSE94533%5FProcessed%5Ffile%5FCohort2%2Exlsx%2Egz)
+- Size
+	- 4.89MB + 9.22MB
 
 
 
