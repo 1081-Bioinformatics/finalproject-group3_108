@@ -61,6 +61,7 @@ make lda lr svm rndfor elasticnet attention
 	- Computes the AUC/CI for ROC curves
 
 ### results
+- You can find figures of results in results/figure.
 #### Which part of the paper do you reproduce?
 1. We reproduced several models (LDA, Logistic Regression, SVM, RandomForest, ElasticNet) in scikit-learn.
 1. We also reproduced the NN model using Keras.
@@ -78,3 +79,5 @@ make lda lr svm rndfor elasticnet attention
 	- matplotlib 
 	- absl-py
 	- coloredlogs
+* [Elias, K. M. et al. Diagnostic potential for a serum miRNA neural network for detection of ovarian cancer. Elife 6, (2017).](https://www.ncbi.nlm.nih.gov/pubmed/29087294)
+* [Vaswani, Ashish, et al. "Attention is all you need." Advances in neural information processing systems. 2017.](https://arxiv.org/abs/1706.03762)
