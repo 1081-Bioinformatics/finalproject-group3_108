@@ -8,21 +8,39 @@ from absl import logging
 
 import json
 import os
-import tqdm
+# import tqdm
+
+class tqdm:
+    @staticmethod
+    def tqdm(x):
+        return x
 
 import numpy as np
 import torch
 
-from engine.batcher import Batcher
-from engine.scorer import Scorer
-from model import Model
+from util.scorer import Scorer
+
+from .batcher import Batcher
 
 ################################################################################################################################
 
 FLAGS = flags.FLAGS
 
+NUM_EPOCH = 100
+NUM_EPOCH_AFTER_BEST = 10
+
 ################################################################################################################################
 
+def get_model(num_feature):
+    model_name = FLAGS.model_name
+
+    if model_name == 'attention':
+        from .model.attention import Model
+        return Model(num_feature=num_feature)
+
+    logging.fatal(f'Unknown model {model_name}!')
+
+################################################################################################################################
 
 class Trainer:
 
@@ -42,10 +60,9 @@ class Trainer:
 
         self.scorer = Scorer()
 
-        self.model = Model(
-            num_feature=self.train_batcher.num_feature,
-        )
+        self.model = get_model(num_feature=self.train_batcher.num_feature)
         self.model.to(device=self.device)
+
         self.optimizer = torch.optim.Adam(
             self.model.parameters(),
             lr=1e-3,
@@ -59,7 +76,7 @@ class Trainer:
         dev_loss_best = np.inf
 
         # Loop for epoch
-        for epoch_idx in range(1, FLAGS.num_epoch + 1):
+        for epoch_idx in range(1, NUM_EPOCH + 1):
 
             # Run training and validation
             train_loss = self._run_train_epoch(self.train_batcher)
@@ -73,14 +90,14 @@ class Trainer:
                 self._save_model()
 
             logging.info(
-                f'Epoch {epoch_idx}/{FLAGS.num_epoch} | '
+                f'Epoch {epoch_idx}/{NUM_EPOCH} | '
                 f'Train Loss: {train_loss:9.6f} | '
                 f'Dev Loss: {dev_loss:9.6f} | '
                 f'Best Dev Loss (#{epoch_idx_best}): {dev_loss_best:9.6f}'
             )
 
             # Check stopping criteria
-            if epoch_idx - epoch_idx_best >= FLAGS.num_epoch_after_best:
+            if epoch_idx - epoch_idx_best >= NUM_EPOCH_AFTER_BEST:
                 break
 
     def run_test(self):
@@ -158,7 +175,7 @@ class Trainer:
         """Load pretrained model.
         """
         file = FLAGS.model_file
-        logging.info(f'Loading model from {file} ...')
+        logging.debug(f'<< {file} ...')
         state_dict = torch.load(
             file, map_location=lambda storage, loc: storage)
 
@@ -167,6 +184,6 @@ class Trainer:
     def _save_model(self):
 
         file = FLAGS.model_file
-        logging.info(f'Saving model into {file} ...')
+        logging.debug(f'>> {file} ...')
         os.makedirs(os.path.dirname(file), exist_ok=True)
         torch.save(self.model.state_dict(), file)

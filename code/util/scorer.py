@@ -50,8 +50,8 @@ class Scorer:
         confidence_lower = sorted_scores[int(0.05 * len(sorted_scores))]
         confidence_upper = sorted_scores[int(0.95 * len(sorted_scores))]
 
-        msg = f"AUC {metrics.roc_auc_score(y_true, y_score):.6f}" + \
-            f" (95%CI {confidence_lower:.6f} - {confidence_upper:.6f})"
+        msg = f"AUC {metrics.roc_auc_score(y_true, y_score):.2f}" + \
+            f" (95%CI {confidence_lower:.2f} - {confidence_upper:.2f})"
 
         print(msg)
 
@@ -74,7 +74,7 @@ class Scorer:
         plt.ylim([0.0, 1.05])
         plt.xlabel('1-Specificity')
         plt.ylabel('Sensitivity')
-        plt.suptitle(FLAGS.appname)
+        plt.suptitle(FLAGS.full_name)
         plt.title(msg)
 
         file = FLAGS.figure_file

@@ -12,12 +12,15 @@ import tqdm
 import numpy as np
 import torch
 
+from util.data_loader import DataLoader
+
 from sklearn import model_selection
-from sklearn import preprocessing
 
 ################################################################################################################################
 
 FLAGS = flags.FLAGS
+
+BATCH_SIZE = 32
 
 ################################################################################################################################
 
@@ -44,7 +47,7 @@ class Batcher:
         dataset = torch.utils.data.TensorDataset(self.x, self.y)
         self.loader = torch.utils.data.DataLoader(
             dataset=dataset,
-            batch_size=FLAGS.batch_size,
+            batch_size=BATCH_SIZE,
             shuffle=shuffle,
         )
 
@@ -57,7 +60,7 @@ class Batcher:
         return self.x.shape[1]
 
     def __len__(self):
-        return int(np.ceil(self.num_sample / FLAGS.batch_size))
+        return int(np.ceil(self.num_sample / BATCH_SIZE))
 
     def __iter__(self):
         yield from self.loader
@@ -65,12 +68,13 @@ class Batcher:
     @classmethod
     def load(cls, *, input_dir, device):
 
-        train_x, train_y = cls._load_data(os.path.join(input_dir, 'train'))
-        test_x, test_y = cls._load_data(os.path.join(input_dir, 'test'))
+        loader = DataLoader(input_dir, scale=True)
 
-        scaler = preprocessing.StandardScaler()
-        train_x = scaler.fit_transform(train_x, train_y)
-        test_x = scaler.transform(test_x)
+        train_x = loader.train_set.x
+        train_y = loader.train_set.y
+
+        test_x = loader.test_set.x
+        test_y = loader.test_set.y
 
         train_x, dev_x, train_y, dev_y = model_selection.train_test_split(
             train_x,
@@ -104,14 +108,3 @@ class Batcher:
         )
 
         return train_batcher, dev_batcher, test_batcher
-
-    @classmethod
-    def _load_data(cls, input_prefix):
-
-        xfile = f'{input_prefix}_x.npy'
-        yfile = f'{input_prefix}_y.npy'
-
-        x = np.load(xfile)
-        y = np.load(yfile)
-
-        return x, y
