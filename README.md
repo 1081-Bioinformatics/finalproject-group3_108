@@ -5,10 +5,16 @@
 * name, student ID3
 * ...
 
-### Demo 
+### Demo
 You might provide an example commend or few commends to reproduce your analysis
-```R
-Rscript code/your_script.R --input data/training --output results/performance.tsv
+```bash
+cd code
+
+# Run preprocessing
+make preprocess
+
+# Run models
+make lda lr svm rndfor elasticnet attention
 ```
 
 ## Folder organization and its related information
@@ -24,7 +30,7 @@ Rscript code/your_script.R --input data/training --output results/performance.ts
 * Size
 
 ### code
-* Which packages do you use? 
+* Which packages do you use?
   * original packages in the paper
   * additional packages you found
 * Analysis steps
