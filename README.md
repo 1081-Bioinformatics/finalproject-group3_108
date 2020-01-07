@@ -41,7 +41,7 @@ make lda lr svm rndfor elasticnet attention
 
 #### Structure
 - `code/core`
-	- Core functions for most models
+	- Core functions for models
 - `code/preprocess`
 	- Preprocessing scripts
 - `code/util`
